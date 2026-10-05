@@ -33,7 +33,7 @@ public final class TankTest {
     public void turnsButDoesNotMoveIntoObstacle() {
         Tree tree = new Tree(new GridPoint2(1, 2));
         GameField field = new GameField(Collections.singletonList(tree));
-        Tank tank = new Tank(field, new GridPoint2(1, 1));
+        Tank tank = new Tank(field, new GridPoint2(1, 1), 0.4f);
 
         tank.move(Direction.UP);
 
@@ -53,10 +53,26 @@ public final class TankTest {
         assertEquals(new GridPoint2(1, 2), tank.getDestinationCoordinates());
     }
 
+    @Test
+    public void usesConfiguredMovementDuration() {
+        Tank tank = new Tank(coordinates -> true, new GridPoint2(1, 1), 0.8f);
+
+        tank.move(Direction.UP);
+        tank.update(0.4f);
+
+        assertEquals(0.5f, tank.getMovementProgress(), 0.0001f);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsNonPositiveMovementDuration() {
+        new Tank(coordinates -> true, new GridPoint2(1, 1), 0f);
+    }
+
     private Tank createTankWithoutObstacles() {
         return new Tank(
                 new GameField(Collections.emptyList()),
-                new GridPoint2(1, 1)
+                new GridPoint2(1, 1),
+                0.4f
         );
     }
 }

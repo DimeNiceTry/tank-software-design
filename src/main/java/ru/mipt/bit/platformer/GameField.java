@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class GameField {
+public final class GameField implements CellAvailability {
 
     private final List<Obstacle> obstacles;
 
@@ -14,6 +14,7 @@ public final class GameField {
         this.obstacles = new ArrayList<>(obstacles);
     }
 
+    @Override
     public boolean isFree(GridPoint2 coordinates) {
         for (Obstacle obstacle : obstacles) {
             if (obstacle.occupies(coordinates)) {
