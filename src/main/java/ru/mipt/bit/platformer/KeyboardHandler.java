@@ -1,36 +1,27 @@
 package ru.mipt.bit.platformer;
 
-import ru.mipt.bit.platformer.util.Direction;
-
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.IntPredicate;
-
-import static com.badlogic.gdx.Input.Keys.*;
 
 public final class KeyboardHandler {
 
-    private final Tank tank;
     private final IntPredicate isKeyPressed;
+    private final Map<Integer, Runnable> actions = new LinkedHashMap<>();
 
-    public KeyboardHandler(Tank tank, IntPredicate isKeyPressed) {
-        this.tank = tank;
+    public KeyboardHandler(IntPredicate isKeyPressed) {
         this.isKeyPressed = isKeyPressed;
     }
 
-    public void handleInput() {
-        moveIfPressed(Direction.UP, UP, W);
-        moveIfPressed(Direction.LEFT, LEFT, A);
-        moveIfPressed(Direction.DOWN, DOWN, S);
-        moveIfPressed(Direction.RIGHT, RIGHT, D);
+    public void bind(int key, Runnable action) {
+        actions.put(key, action);
     }
 
-    private void moveIfPressed(
-            Direction direction,
-            int firstKey,
-            int secondKey
-    ) {
-        if (isKeyPressed.test(firstKey)
-                || isKeyPressed.test(secondKey)) {
-            tank.move(direction);
+    public void handleInput() {
+        for (Map.Entry<Integer, Runnable> entry : actions.entrySet()) {
+            if (isKeyPressed.test(entry.getKey())) {
+                entry.getValue().run();
+            }
         }
     }
 }
