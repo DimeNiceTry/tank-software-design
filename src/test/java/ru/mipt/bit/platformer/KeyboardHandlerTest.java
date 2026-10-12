@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer;
 
 import org.junit.Test;
+import ru.mipt.bit.platformer.input.KeyboardHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;

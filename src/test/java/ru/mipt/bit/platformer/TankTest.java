@@ -2,7 +2,8 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.Test;
-import ru.mipt.bit.platformer.util.Direction;
+import ru.mipt.bit.platformer.model.Tank;
+import ru.mipt.bit.platformer.model.Tree;
 
 import java.util.Collections;
 
@@ -32,7 +33,7 @@ public final class TankTest {
     @Test
     public void turnsButDoesNotMoveIntoObstacle() {
         Tree tree = new Tree(new GridPoint2(1, 2));
-        GameField field = new GameField(Collections.singletonList(tree));
+        GameField field = new GameField(10, 8, Collections.singletonList(tree));
         Tank tank = new Tank(field, new GridPoint2(1, 1), 0.4f);
 
         tank.move(Direction.UP);
@@ -70,7 +71,7 @@ public final class TankTest {
 
     private Tank createTankWithoutObstacles() {
         return new Tank(
-                new GameField(Collections.emptyList()),
+                new GameField(10, 8, Collections.emptyList()),
                 new GridPoint2(1, 1),
                 0.4f
         );
