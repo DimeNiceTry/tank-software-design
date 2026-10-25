@@ -1,7 +1,8 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.model;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.util.Direction;
+import ru.mipt.bit.platformer.CellAvailability;
+import ru.mipt.bit.platformer.Direction;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
