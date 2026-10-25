@@ -18,6 +18,10 @@ public final class GameField implements CellAvailability {
         this.obstacles = new ArrayList<>(obstacles);
     }
 
+    public void addObstacle(Obstacle obstacle) {
+        obstacles.add(obstacle);
+    }
+
     @Override
     public boolean isFree(GridPoint2 coordinates) {
         if (coordinates.x < 0 || coordinates.x >= width || coordinates.y < 0 || coordinates.y >= height) {

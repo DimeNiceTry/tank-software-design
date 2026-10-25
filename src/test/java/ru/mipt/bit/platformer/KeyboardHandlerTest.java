@@ -20,7 +20,7 @@ public final class KeyboardHandlerTest {
         handler.bind(W, () -> actions.add("up"));
         handler.bind(A, () -> actions.add("left"));
 
-        handler.handleInput();
+        handler.update(0f);
 
         assertEquals(Arrays.asList("up"), actions);
     }
@@ -32,7 +32,7 @@ public final class KeyboardHandlerTest {
         handler.bind(W, () -> actions.add("up"));
         handler.bind(A, () -> actions.add("left"));
 
-        handler.handleInput();
+        handler.update(0f);
 
         assertEquals(Arrays.asList("up", "left"), actions);
     }

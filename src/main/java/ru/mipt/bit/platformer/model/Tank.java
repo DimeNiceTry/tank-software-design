@@ -3,11 +3,12 @@ package ru.mipt.bit.platformer.model;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.CellAvailability;
 import ru.mipt.bit.platformer.Direction;
+import ru.mipt.bit.platformer.Obstacle;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 
-public final class Tank {
+public final class Tank implements Obstacle {
 
     private final CellAvailability cellAvailability;
     private final float movementDuration;
@@ -55,6 +56,11 @@ public final class Tank {
 
     public GridPoint2 getCoordinates() {
         return new GridPoint2(coordinates);
+    }
+
+    @Override
+    public boolean occupies(GridPoint2 cell) {
+        return coordinates.equals(cell) || destinationCoordinates.equals(cell);
     }
 
     public GridPoint2 getDestinationCoordinates() {
