@@ -62,9 +62,9 @@ public final class TankTest {
         Tank moving = new Tank(field, new GridPoint2(1, 1), 1f);
         Tank atStart = new Tank(field, new GridPoint2(0, 1), 1f);
         Tank atDestination = new Tank(field, new GridPoint2(2, 2), 1f);
-        field.addObstacle(moving);
-        field.addObstacle(atStart);
-        field.addObstacle(atDestination);
+        field.add(moving);
+        field.add(atStart);
+        field.add(atDestination);
 
         moving.move(Direction.UP);
         atStart.move(Direction.RIGHT);
@@ -100,7 +100,7 @@ public final class TankTest {
 
     @Test
     public void usesConfiguredMovementDuration() {
-        Tank tank = new Tank(coordinates -> true, new GridPoint2(1, 1), 0.8f);
+        Tank tank = new Tank(new GameField(3, 3, Collections.emptyList()), new GridPoint2(1, 1), 0.8f);
 
         tank.move(Direction.UP);
         tank.update(0.4f);
@@ -110,7 +110,7 @@ public final class TankTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectsNonPositiveMovementDuration() {
-        new Tank(coordinates -> true, new GridPoint2(1, 1), 0f);
+        new Tank(new GameField(3, 3, Collections.emptyList()), new GridPoint2(1, 1), 0f);
     }
 
     private Tank createTankWithoutObstacles() {

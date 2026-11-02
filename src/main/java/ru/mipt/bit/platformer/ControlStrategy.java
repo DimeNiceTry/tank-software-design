@@ -1,6 +1,8 @@
 package ru.mipt.bit.platformer;
 
+import java.util.function.Consumer;
+
 public interface ControlStrategy {
 
-    void update(float deltaTime);
+    void collectActions(float deltaTime, Consumer<Action> actions);
 }

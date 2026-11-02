@@ -23,7 +23,7 @@ public final class RandomTankSpawnerTest {
         Level level = new Level(3, 2, Collections.singletonList(new Tree(new GridPoint2(0, 0))),
                 new GridPoint2(1, 0));
         GameField field = new GameField(3, 2, level.getTrees());
-        field.addObstacle(new Tank(field, level.getTankStart(), 0.4f));
+        field.add(new Tank(field, level.getTankStart(), 0.4f));
 
         List<GridPoint2> starts = new RandomTankSpawner(new Random(42)).generate(level, field, 3);
 
@@ -40,7 +40,7 @@ public final class RandomTankSpawnerTest {
         Level level = new Level(2, 1, Collections.singletonList(new Tree(new GridPoint2(0, 0))),
                 new GridPoint2(1, 0));
         GameField field = new GameField(2, 1, level.getTrees());
-        field.addObstacle(new Tank(field, level.getTankStart(), 0.4f));
+        field.add(new Tank(field, level.getTankStart(), 0.4f));
 
         assertTrue(new RandomTankSpawner(new Random(42)).generate(level, field, 3).isEmpty());
         assertTrue(new RandomTankSpawner(new Random(42)).generate(level, field, 0).isEmpty());

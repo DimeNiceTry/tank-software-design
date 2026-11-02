@@ -17,6 +17,9 @@ public final class TextLevelSource implements LevelSource {
     @Override
     public Level load() {
         String[] rows = text.get().split("\\R");
+        if (rows.length == 0) {
+            throw new IllegalArgumentException("Level must not be empty");
+        }
         int height = rows.length;
         int width = rows[0].length();
         if (width == 0) {

@@ -41,4 +41,19 @@ public final class TextLevelSourceTest {
     public void rejectsUnknownCells() {
         new TextLevelSource(() -> "X?\n__\n").load();
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsFileContainingOnlyLineBreaks() {
+        new TextLevelSource(() -> "\r\n\n\r\n").load();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsLayoutNotMatchingBackgroundSize() {
+        new TextLevelSource(() -> "X_\n__").load().requireSize(10, 8);
+    }
+
+    @Test
+    public void acceptsLayoutMatchingBackgroundSize() {
+        new TextLevelSource(() -> "X_\n__").load().requireSize(2, 2);
+    }
 }

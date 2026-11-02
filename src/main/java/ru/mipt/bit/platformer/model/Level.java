@@ -28,6 +28,13 @@ public final class Level {
         return height;
     }
 
+    public void requireSize(int expectedWidth, int expectedHeight) {
+        if (width != expectedWidth || height != expectedHeight) {
+            throw new IllegalArgumentException("Level size must match the background map: "
+                    + expectedWidth + "x" + expectedHeight);
+        }
+    }
+
     public List<Tree> getTrees() {
         return trees;
     }

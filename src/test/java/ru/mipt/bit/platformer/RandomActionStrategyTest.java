@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public final class RandomActionStrategyTest {
 
     @Test
-    public void executesRandomActionAtEachInterval() {
+    public void collectsRandomActionAtEachInterval() {
         List<String> executed = new ArrayList<>();
         Random random = new Random() {
             @Override
@@ -27,11 +28,14 @@ public final class RandomActionStrategyTest {
                 () -> executed.add("right")
         ), random, 0.5f);
 
-        strategy.update(0f);
-        strategy.update(0.25f);
-        assertEquals(Collections.singletonList("right"), executed);
+        List<Action> commands = new ArrayList<>();
+        strategy.collectActions(0f, commands::add);
+        strategy.collectActions(0.25f, commands::add);
+        assertEquals(1, commands.size());
+        assertTrue(executed.isEmpty());
 
-        strategy.update(0.25f);
+        strategy.collectActions(0.25f, commands::add);
+        commands.forEach(Action::execute);
         assertEquals(Arrays.asList("right", "right"), executed);
     }
 

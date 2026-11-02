@@ -27,7 +27,7 @@ public final class GameFieldTest {
 
     @Test
     public void copiesObstacleCollection() {
-        List<Obstacle> obstacles = new ArrayList<>();
+        List<GameObject> obstacles = new ArrayList<>();
         GameField field = new GameField(10, 8, obstacles);
 
         obstacles.add(new Tree(new GridPoint2(1, 3)));

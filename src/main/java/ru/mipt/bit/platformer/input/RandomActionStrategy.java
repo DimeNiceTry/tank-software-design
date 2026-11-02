@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public final class RandomActionStrategy implements ControlStrategy {
 
@@ -26,10 +27,10 @@ public final class RandomActionStrategy implements ControlStrategy {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void collectActions(float deltaTime, Consumer<Action> commands) {
         elapsed += deltaTime;
         if (elapsed >= interval) {
-            actions.get(random.nextInt(actions.size())).execute();
+            commands.accept(actions.get(random.nextInt(actions.size())));
             elapsed = 0f;
         }
     }

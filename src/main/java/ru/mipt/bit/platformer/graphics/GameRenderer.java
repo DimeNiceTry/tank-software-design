@@ -6,37 +6,54 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Disposable;
+import ru.mipt.bit.platformer.GameField;
+import ru.mipt.bit.platformer.GameFieldListener;
+import ru.mipt.bit.platformer.GameObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createSingleLayerMapRenderer;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.getSingleLayer;
 
-public final class GameRenderer implements Disposable {
+public final class GameRenderer implements Disposable, GameFieldListener {
 
-    private final List<EntityRenderer> entities;
+    private final Map<GameObject, EntityRenderer> entities = new LinkedHashMap<>();
+    private final GameField field;
+    private final Function<GameObject, EntityRenderer> rendererFactory;
     private final Batch batch;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
     private final TileMovement tileMovement;
 
-    public GameRenderer(Collection<? extends EntityRenderer> entities) {
-        this.entities = new ArrayList<>(entities);
+    public GameRenderer(GameField field, TiledMap level, Interpolation interpolation,
+                        Function<GameObject, EntityRenderer> rendererFactory) {
+        this.field = field;
+        this.level = level;
+        this.rendererFactory = rendererFactory;
         batch = new SpriteBatch();
-        level = new TmxMapLoader().load("level.tmx");
 
         TiledMapTileLayer groundLayer = getSingleLayer(level);
         levelRenderer = createSingleLayerMapRenderer(level, batch);
         tileMovement = new TileMovement(
                 groundLayer,
-                Interpolation.smooth
+                interpolation
         );
+        field.addListener(this);
+    }
+
+    @Override
+    public void objectAdded(GameObject object) {
+        entities.put(object, rendererFactory.apply(object));
+    }
+
+    @Override
+    public void objectRemoved(GameObject object) {
+        entities.remove(object);
     }
 
     public void render() {
@@ -46,7 +63,7 @@ public final class GameRenderer implements Disposable {
         levelRenderer.render();
 
         batch.begin();
-        for (EntityRenderer entity : entities) {
+        for (EntityRenderer entity : entities.values()) {
             entity.render(batch, tileMovement);
         }
         batch.end();
@@ -54,9 +71,8 @@ public final class GameRenderer implements Disposable {
 
     @Override
     public void dispose() {
-        for (EntityRenderer entity : entities) {
-            entity.dispose();
-        }
+        field.removeListener(this);
+        entities.clear();
         level.dispose();
         batch.dispose();
     }
