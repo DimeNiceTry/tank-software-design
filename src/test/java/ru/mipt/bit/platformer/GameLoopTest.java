@@ -2,13 +2,17 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.Test;
+import ru.mipt.bit.platformer.graphics.HealthBarVisibility;
+import ru.mipt.bit.platformer.input.KeyboardHandler;
 import ru.mipt.bit.platformer.model.Tank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.badlogic.gdx.Input.Keys.L;
 import static org.junit.Assert.*;
 
 public final class GameLoopTest {
@@ -24,7 +28,10 @@ public final class GameLoopTest {
         GameField field = new GameField(2, 2, Collections.singletonList(object));
         Tank tank = new Tank(field, new GridPoint2(1, 1), 0.4f);
         field.add(tank);
-        GameLoop loop = new GameLoop(field);
+        GameLoop loop = new GameLoop(field, (tick, commands) -> {
+            events.add("collectGlobal");
+            commands.accept(() -> events.add("executeGlobal"));
+        });
         loop.control(object, (tick, commands) -> {
             events.add("collect1");
             commands.accept(() -> events.add("execute1"));
@@ -36,7 +43,37 @@ public final class GameLoopTest {
 
         loop.update(0.1f);
 
-        assertEquals(Arrays.asList("collect1", "collect2", "execute1", "execute2", "tick"), events);
+        assertEquals(Arrays.asList("collectGlobal", "collect1", "collect2",
+                "executeGlobal", "execute1", "execute2", "tick"), events);
+    }
+
+    @Test
+    public void togglesHealthBarsOncePerPressEvenAfterPlayerDies() {
+        GameField field = new GameField(2, 2, Collections.emptyList());
+        Tank player = new Tank(field, new GridPoint2(0, 0), 0.4f);
+        field.add(player);
+        AtomicBoolean pressed = new AtomicBoolean(false);
+        HealthBarVisibility healthBars = new HealthBarVisibility();
+        KeyboardHandler keyboard = new KeyboardHandler(key -> key == L && pressed.get());
+        keyboard.bindOnPress(L, healthBars::toggle);
+        GameLoop loop = new GameLoop(field, keyboard);
+        loop.control(player, (tick, commands) -> commands.accept(new ShootAction(player)));
+
+        loop.update(0f);
+        assertFalse(healthBars.isVisible());
+        pressed.set(true);
+        loop.update(0f);
+        assertTrue(healthBars.isVisible());
+        loop.update(0f);
+        assertTrue(healthBars.isVisible());
+
+        pressed.set(false);
+        player.hit(101);
+        loop.update(0f);
+        assertFalse(field.contains(player));
+        pressed.set(true);
+        loop.update(0f);
+        assertFalse(healthBars.isVisible());
     }
 
     @Test

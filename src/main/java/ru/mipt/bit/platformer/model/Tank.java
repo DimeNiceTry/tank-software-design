@@ -12,6 +12,7 @@ public final class Tank implements GameObject {
 
     private final GameWorld world;
     private final float movementDuration;
+    private final int maxHealth;
     private final int bulletDamage;
     private final float bulletStepDuration;
     private final GridPoint2 coordinates;
@@ -32,6 +33,7 @@ public final class Tank implements GameObject {
         }
         this.world = world;
         this.movementDuration = movementDuration;
+        this.maxHealth = health;
         this.health = health;
         this.bulletDamage = bulletDamage;
         this.bulletStepDuration = bulletStepDuration;
@@ -111,6 +113,10 @@ public final class Tank implements GameObject {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public boolean isAlive() {

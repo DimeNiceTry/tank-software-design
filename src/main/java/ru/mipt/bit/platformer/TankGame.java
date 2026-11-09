@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.graphics.BulletRenderer;
 import ru.mipt.bit.platformer.graphics.EntityRenderer;
 import ru.mipt.bit.platformer.graphics.GameRenderer;
+import ru.mipt.bit.platformer.graphics.HealthBarRenderer;
+import ru.mipt.bit.platformer.graphics.HealthBarVisibility;
 import ru.mipt.bit.platformer.graphics.TankRenderer;
 import ru.mipt.bit.platformer.graphics.TreeRenderer;
 import ru.mipt.bit.platformer.input.KeyboardHandler;
@@ -38,11 +40,13 @@ public final class TankGame extends ApplicationAdapter {
     private static final int RANDOM_TANK_COUNT = 3;
 
     private final LevelSource levelSource;
+    private final HealthBarVisibility healthBars = new HealthBarVisibility();
     private GameLoop gameLoop;
     private GameRenderer renderer;
     private Texture tankTexture;
     private Texture treeTexture;
     private Texture bulletTexture;
+    private Texture healthBarTexture;
 
     public TankGame(LevelSource levelSource) {
         this.levelSource = levelSource;
@@ -68,9 +72,17 @@ public final class TankGame extends ApplicationAdapter {
         bulletTexture = new Texture(bulletImage);
         bulletImage.dispose();
 
+        Pixmap healthBarImage = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        healthBarImage.setColor(Color.WHITE);
+        healthBarImage.fill();
+        healthBarTexture = new Texture(healthBarImage);
+        healthBarImage.dispose();
+
         GameField field = new GameField(level.getWidth(), level.getHeight(), Collections.emptyList());
         renderer = new GameRenderer(field, background, Interpolation.smooth, this::createRenderer);
-        gameLoop = new GameLoop(field);
+        KeyboardHandler displayKeyboard = new KeyboardHandler(Gdx.input::isKeyPressed);
+        displayKeyboard.bindOnPress(L, healthBars::toggle);
+        gameLoop = new GameLoop(field, displayKeyboard);
         for (Tree tree : level.getTrees()) {
             field.add(tree);
         }
@@ -102,7 +114,9 @@ public final class TankGame extends ApplicationAdapter {
 
     private EntityRenderer createRenderer(GameObject object) {
         if (object instanceof Tank) {
-            return new TankRenderer((Tank) object, new TextureRegion(tankTexture));
+            Tank tank = (Tank) object;
+            return new HealthBarRenderer(new TankRenderer(tank, new TextureRegion(tankTexture)),
+                    tank, new TextureRegion(healthBarTexture), healthBars::isVisible);
         }
         if (object instanceof Tree) {
             return new TreeRenderer((Tree) object, new TextureRegion(treeTexture));
@@ -131,5 +145,6 @@ public final class TankGame extends ApplicationAdapter {
         if (tankTexture != null) tankTexture.dispose();
         if (treeTexture != null) treeTexture.dispose();
         if (bulletTexture != null) bulletTexture.dispose();
+        if (healthBarTexture != null) healthBarTexture.dispose();
     }
 }

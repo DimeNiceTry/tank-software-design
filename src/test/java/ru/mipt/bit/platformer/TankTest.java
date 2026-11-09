@@ -14,6 +14,20 @@ import static org.junit.Assert.assertTrue;
 public final class TankTest {
 
     @Test
+    public void keepsMaximumHealthWhenTakingDamage() {
+        Tank defaultTank = createTankWithoutObstacles();
+        assertEquals(100, defaultTank.getHealth());
+        assertEquals(100, defaultTank.getMaxHealth());
+
+        Tank tank = new Tank(new GameField(3, 3, Collections.emptyList()),
+                new GridPoint2(1, 1), 0.4f, 80, 40, 0.1f);
+        tank.hit(30);
+
+        assertEquals(50, tank.getHealth());
+        assertEquals(80, tank.getMaxHealth());
+    }
+
+    @Test
     public void movesToFreeNeighbouringCell() {
         Tank tank = createTankWithoutObstacles();
 
