@@ -5,6 +5,8 @@ import ru.mipt.bit.platformer.Direction;
 import ru.mipt.bit.platformer.GameObject;
 import ru.mipt.bit.platformer.GameWorld;
 
+import java.util.Objects;
+
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 
@@ -21,6 +23,7 @@ public final class Tank implements GameObject {
     private float movementProgress = 1f;
     private Direction direction = Direction.RIGHT;
     private int health;
+    private TankState state;
 
     public Tank(GameWorld world, GridPoint2 initialCoordinates, float movementDuration) {
         this(world, initialCoordinates, movementDuration, 100, 40, 0.1f);
@@ -35,6 +38,7 @@ public final class Tank implements GameObject {
         this.movementDuration = movementDuration;
         this.maxHealth = health;
         this.health = health;
+        state = HealthTankState.fromHealth(health, maxHealth);
         this.bulletDamage = bulletDamage;
         this.bulletStepDuration = bulletStepDuration;
         coordinates = new GridPoint2(initialCoordinates);
@@ -57,6 +61,10 @@ public final class Tank implements GameObject {
 
     @Override
     public void update(float deltaTime) {
+        state.update(this, deltaTime);
+    }
+
+    void advanceMovement(float deltaTime) {
         movementProgress = clamp(
                 movementProgress + deltaTime / movementDuration,
                 0f,
@@ -91,11 +99,20 @@ public final class Tank implements GameObject {
 
     public void shoot() {
         if (isAlive() && world.contains(this)) {
-            Bullet bullet = new Bullet(world, this, direction.move(coordinates), direction,
-                    bulletDamage, bulletStepDuration);
-            world.add(bullet);
-            bullet.update(0f);
+            state.shoot(this);
         }
+    }
+
+    void fireBullet() {
+        Bullet bullet = new Bullet(world, this, direction.move(coordinates), direction,
+                bulletDamage, bulletStepDuration);
+        world.add(bullet);
+        bullet.update(0f);
+    }
+
+    /** Changes behavior, e.g. for a future booster; damage selects a health-based state again. */
+    public void changeState(TankState state) {
+        this.state = Objects.requireNonNull(state);
     }
 
     @Override
@@ -105,6 +122,7 @@ public final class Tank implements GameObject {
         }
         if (isAlive()) {
             health -= damage;
+            changeState(HealthTankState.fromHealth(health, maxHealth));
             if (!isAlive()) {
                 world.remove(this);
             }

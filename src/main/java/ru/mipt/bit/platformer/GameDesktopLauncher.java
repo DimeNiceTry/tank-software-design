@@ -9,6 +9,7 @@ import ru.mipt.bit.platformer.model.TextLevelSource;
 
 import java.util.Random;
 
+/** Infrastructure bootstrap: chooses a level adapter and connects the file reader. */
 public final class GameDesktopLauncher {
 
     public static void main(String[] args) {

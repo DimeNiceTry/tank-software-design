@@ -20,6 +20,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createSingleLayerMapRenderer;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.getSingleLayer;
 
+/** Output adapter for GameFieldListener: presents the logical world using libGDX. */
 public final class GameRenderer implements Disposable, GameFieldListener {
 
     private final Map<GameObject, EntityRenderer> entities = new LinkedHashMap<>();

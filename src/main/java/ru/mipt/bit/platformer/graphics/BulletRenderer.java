@@ -9,6 +9,7 @@ import ru.mipt.bit.platformer.model.Bullet;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
 
+/** Infrastructure: bullet drawing component of the libGDX output adapter. */
 public final class BulletRenderer implements EntityRenderer {
 
     private final Bullet bullet;

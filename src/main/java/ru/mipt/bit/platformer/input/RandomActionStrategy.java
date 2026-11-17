@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+/** Application: internal AI command source; has no dependency on input devices. */
 public final class RandomActionStrategy implements ControlStrategy {
 
     private final List<Action> actions;

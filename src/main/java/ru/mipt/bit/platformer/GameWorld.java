@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.List;
 
+/** Internal domain contract for the logical world; not an infrastructure boundary. */
 public interface GameWorld extends CellAvailability {
 
     void add(GameObject object);

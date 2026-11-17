@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/** Output adapter for LevelSource: generates a level instead of reading one. */
 public final class RandomLevelSource implements LevelSource {
 
     private final int width;

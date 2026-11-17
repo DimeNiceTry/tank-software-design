@@ -8,6 +8,7 @@ import ru.mipt.bit.platformer.model.Tank;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
 
+/** Infrastructure: tank drawing component of the libGDX output adapter. */
 public final class TankRenderer implements EntityRenderer {
 
     private final Tank tank;

@@ -10,6 +10,7 @@ import java.util.function.BooleanSupplier;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 
+/** Infrastructure: health bar decorator in the libGDX output adapter. */
 public final class HealthBarRenderer implements EntityRenderer {
 
     private final EntityRenderer wrapped;

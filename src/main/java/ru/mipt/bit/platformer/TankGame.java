@@ -34,6 +34,7 @@ import java.util.Random;
 import static com.badlogic.gdx.Input.Keys.*;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.getSingleLayer;
 
+/** Infrastructure: libGDX lifecycle adapter and composition root for the game. */
 public final class TankGame extends ApplicationAdapter {
 
     private static final float TANK_MOVEMENT_DURATION = 0.4f;

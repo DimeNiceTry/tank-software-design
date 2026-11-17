@@ -9,6 +9,7 @@ import ru.mipt.bit.platformer.model.Tree;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
 
+/** Infrastructure: tree drawing component of the libGDX output adapter. */
 public final class TreeRenderer implements EntityRenderer {
 
     private final Tree tree;

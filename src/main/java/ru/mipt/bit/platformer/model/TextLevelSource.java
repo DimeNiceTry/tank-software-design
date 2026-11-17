@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/** Output adapter for LevelSource: parses text; the launcher supplies file access. */
 public final class TextLevelSource implements LevelSource {
 
     private final Supplier<String> text;

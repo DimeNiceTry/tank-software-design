@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
+/** Input adapter: turns key states into commands; libGDX is connected through IntPredicate. */
 public final class KeyboardHandler implements ControlStrategy {
 
     private final IntPredicate isKeyPressed;
